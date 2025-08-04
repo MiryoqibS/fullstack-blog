@@ -1,0 +1,12 @@
+// Базовые стили
+@use "./styles/reset";
+@use "./styles/typography";
+@use "./styles/variables";
+@use "./styles/utils";
+@use "./styles/global";
+
+// Компоненты
+@use "./styles/components/Header";
+@use "./styles/components/Footer";
+@use "./styles/components/Section";
+@use "./styles/components/Card";

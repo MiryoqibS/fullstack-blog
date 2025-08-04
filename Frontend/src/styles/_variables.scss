@@ -1,0 +1,23 @@
+:root {
+    // Базовые цвета
+    --color-light: #FFFFFF;
+    --color-dark: #333;
+
+    // Акцентные цвета
+    --color-primary: #18A0FB;
+    --color-primary-hover: #1095ee;
+    --color-secondary: #6de4ea;
+    
+    // Цвета текстов
+    --color-text: #333;
+    --color-primary-text: #FFFFFF;
+    --color-text-light: #FFFFFF;
+    --color-dark-transparent: rgba(0, 0, 0, 0.5);
+
+    // Шрифты
+    --font-base: "Montserrat", sans-serif;
+
+    // Размеры
+    --container-width: 1470px;
+    --container-padding-x: 15px;
+}

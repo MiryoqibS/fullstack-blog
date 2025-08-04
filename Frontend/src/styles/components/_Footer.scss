@@ -1,0 +1,37 @@
+@use "../mixins" as m;
+
+// Контейнер для заднего фона
+#footer {
+    background-color: var(--color-dark);
+    opacity: 0.8;
+    margin-top: 100px;
+}
+
+.footer {
+    display: flex;
+    padding-block: 100px;
+    align-items: center;
+    justify-content: space-between;
+
+    &-logo {
+        color: var(--color-text-light);
+        font-size: 48px;
+    }
+
+    &-nav {
+        display: flex;
+        align-items: center;
+        column-gap: 64px;
+
+        &__link {
+            @include m.link-animation;
+
+            color: var(--color-text-light);
+        }
+    }
+
+    &-copyright {
+        color: var(--color-text-light);
+        opacity: 0.8;
+    }
+}
