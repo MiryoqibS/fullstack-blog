@@ -1,0 +1,51 @@
+@use "../mixins" as m;
+
+.profile {
+    display: flex;
+    align-items: start;
+    padding: 20px 15px;
+    flex-direction: column;
+    row-gap: 32px;
+    box-shadow: var(--shadow);
+    border-radius: 20px;
+    max-width: 400px;
+    min-height: 100vh;
+
+    &-field {
+        display: flex;
+        flex-direction: column;
+        row-gap: 12px;
+        align-items: start;
+        width: 100%;
+        padding-top: 10px;
+
+        &:not(:first-child) {
+            border-top: 2px solid var(--color-primary);
+        }
+
+        &__value {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            column-gap: 4px;
+            font-weight: 500;
+
+            &.email {
+                flex-direction: row-reverse;
+            }
+
+            &.role {
+                position: relative;
+                background-color: var(--color-primary);
+                color: var(--color-light);
+                padding: 2px 14px;
+                border-radius: 4px;
+                transition: background-color var(--transition-slow);
+
+                @include m.hover() {
+                    background-color: var(--color-primary-hover);
+                }
+            }
+        }
+    }
+}

@@ -2,14 +2,14 @@
 import "/src/importer.scss";
 
 import { Header } from "../components/Header";
-import { SectionFeatures } from "../components/sections/SectionFeatures";
+import { LoginForm } from "../components/LoginForm";
 import { Footer } from "../components/Footer";
 
 const headerElement = new Header(document.body);
 await headerElement.init();
 
-const sectionFeaturesElement = new SectionFeatures(document.body, "Features");
-sectionFeaturesElement.init();
+const loginFormElement = new LoginForm(document.body);
+loginFormElement.init();
 
 const footerElement = new Footer(document.body);
 footerElement.init();

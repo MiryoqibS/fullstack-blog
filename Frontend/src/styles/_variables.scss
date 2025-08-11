@@ -7,12 +7,17 @@
     --color-primary: #18A0FB;
     --color-primary-hover: #1095ee;
     --color-secondary: #6de4ea;
-    
+
     // Цвета текстов
     --color-text: #333;
     --color-primary-text: #FFFFFF;
     --color-text-light: #FFFFFF;
     --color-dark-transparent: rgba(0, 0, 0, 0.5);
+
+    // Цвета информации
+    --color-error: #e53935;
+    --color-success: #43a047;
+    --color-border: rgba(0, 0, 0, 0.2);
 
     // Шрифты
     --font-base: "Montserrat", sans-serif;
@@ -20,4 +25,11 @@
     // Размеры
     --container-width: 1470px;
     --container-padding-x: 15px;
+
+    // Переходы
+    --transition-slow: 0.4s ease;
+    --transition-fast: 0.2s ease;
+
+    // Тены
+    --shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }

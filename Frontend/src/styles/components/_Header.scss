@@ -24,23 +24,13 @@
         }
     }
 
-    &-search {
+    &-actions {
         display: flex;
-        align-items: stretch;
-        height: 40px;
-        border-radius: 6px;
-        overflow: hidden;
-        border: 1px solid var(--color-primary);
+        align-items: center;
+        column-gap: 12px;
 
         &__button {
-            font-weight: 500;
-            background-color: var(--color-primary);
-            padding: 12px 14px;
-            color: var(--color-primary-text);
-        }
-
-        &__input {
-            padding-left: 20px;
+            column-gap: 6px;
         }
     }
 }

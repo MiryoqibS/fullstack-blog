@@ -1,7 +1,25 @@
+@use "./mixins" as m;
+
 html, body {
     font-family: var(--font-base);
     font-size: 16px;
     line-height: 1.5;
     background-color: var(--color-light);
     color: var(--color-text);
+}
+
+h1 {
+    @include m.fluid-text(48, 56);
+}
+
+h2 {
+    @include m.fluid-text(32, 48);
+}
+
+h3 {
+    @include m.fluid-text(24, 32);
+}
+
+h4 {
+    @include m.fluid-text(16, 24);
 }

@@ -40,16 +40,16 @@ export class Footer {
 
         const LINKS = [
             {
-                title: "Home",
-                href: "/src/index.html",
+                title: "Главная",
+                href: "/src/pages/index.html",
             },
             {
-                title: "Blog",
-                href: "/src/templates/blog.html",
+                title: "Блог",
+                href: "/src/pages/blog.html",
             },
             {
-                title: "About me",
-                href: "/src/templates/about-me.html",
+                title: "Обо мне",
+                href: "/src/pages/about-me.html",
             },
         ];
 
@@ -67,7 +67,7 @@ export class Footer {
     _createCopyright() {
         const copyright = document.createElement("p");
         copyright.className = "footer-copyright";
-        copyright.innerText = `© Miryoqib BLog ${new Date().getFullYear()}.`;
+        copyright.innerText = `© Miryoqib Blog ${new Date().getFullYear()}.`;
 
         return copyright;
     }

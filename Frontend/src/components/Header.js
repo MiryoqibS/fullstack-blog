@@ -1,24 +1,27 @@
+import api from "../utils/axiosUtil";
+import { loadIcon } from "../utils/loadIcon";
+
 export class Header {
     constructor(parentNode) {
         this.parentNode = parentNode;
     }
 
-    init() {
-        const header = this.render();
+    async init() {
+        const header = await this.render();
         this.parentNode.appendChild(header);
     }
 
-    render() {
+    async render() {
         const header = document.createElement("header");
         header.className = "header container";
 
         const logo = this._createLogo();
         const nav = this._createNav();
-        const search = this._createSearch();
+        const actions = await this._createActions();
 
         header.appendChild(logo);
         header.appendChild(nav);
-        header.appendChild(search);
+        header.appendChild(actions);
 
         return header;
     }
@@ -37,20 +40,20 @@ export class Header {
 
         const LINKS = [
             {
-                title: "Home",
-                href: "/src/index.html",
+                title: "Главная",
+                href: "/src/pages/index.html",
             },
             {
-                title: "Blog",
-                href: "/src/templates/blog.html",
+                title: "Блог",
+                href: "/src/pages/blog.html",
             },
             {
-                title: "About me",
-                href: "/src/templates/about-me.html",
+                title: "Обо мне",
+                href: "/src/pages/about-me.html",
             },
         ];
 
-        LINKS.forEach(({title, href}) => {
+        LINKS.forEach(({ title, href }) => {
             const navLink = document.createElement("a");
             navLink.className = "header-nav__link";
             navLink.innerText = title;
@@ -61,21 +64,74 @@ export class Header {
         return nav;
     }
 
-    _createSearch() {
-        const search = document.createElement("div");
-        search.className = "header-search";
+    async _createActions() {
+        const actions = document.createElement("div");
+        actions.className = "header-actions";
+        const isAuth = await this._checkAuth();
 
-        const searchButton = document.createElement("button");
-        searchButton.className = "header-search__button";
-        searchButton.innerText = "Search";
+        if (isAuth) {
+            const profileButton = document.createElement("button");
+            profileButton.className = "header-actions__button button";
+            profileButton.innerText = await this._getUsername();
+            profileButton.onclick = () => window.location.href = "/src/pages/profile.html";
 
-        const searchInput = document.createElement("input");
-        searchInput.className = "header-search__input";
-        searchInput.placeholder = "...";
+            const profileIcon = loadIcon("user");
+            profileButton.appendChild(profileIcon);
+            actions.appendChild(profileButton);
+        } else {
+            [
+                {
+                    icon: "login",
+                    onclick: () => window.location.href = "/src/pages/login.html",
+                },
+                {
+                    icon: "register",
+                    onclick: () => window.location.href = "/src/pages/register.html",
+                },
+            ].forEach(button => {
+                const actionButton = document.createElement("button");
+                actionButton.className = `header-actions__button button`;
+                actionButton.innerText = button.icon === "login" ? "Войти" : "Регистрация";
+                actionButton.onclick = button.onclick;
 
-        search.appendChild(searchButton);
-        search.appendChild(searchInput);
+                const buttonSvg = loadIcon(button.icon, 14, 14);
+                actionButton.appendChild(buttonSvg);
+                actions.appendChild(actionButton);
+            });
+        };
 
-        return search;
+        const role = await this._getUserRole();
+
+        if (role === "creator") {
+            const createPostButton = document.createElement("button");
+            createPostButton.className = "header-actions__button button";
+            createPostButton.innerText = "Создать пост";
+
+            const createIcon = loadIcon("create",);
+            createPostButton.appendChild(createIcon);
+
+            actions.appendChild(createPostButton);
+        };
+
+        return actions;
+    }
+
+    async _checkAuth() {
+        const res = await api.get("/user/isAuth");
+        const data = res.data;
+        const isAuth = data.isAuth;
+        return isAuth;
+    }
+
+    async _getUsername() {
+        const user = await api.get("/user/profile");
+        const data = user.data;
+        return data.username;
+    }
+
+    async _getUserRole() {
+        const user = await api.get("/user/profile");
+        const data = user.data;
+        return data.role;
     }
 }

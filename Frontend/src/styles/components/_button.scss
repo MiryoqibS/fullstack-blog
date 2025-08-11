@@ -1,0 +1,16 @@
+@use "../mixins" as m;
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-primary);
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: var(--color-light);
+    transition: background-color var(--transition-slow);
+
+    @include m.hover() {
+        background-color: var(--color-primary-hover);
+    }
+}
