@@ -3,7 +3,8 @@ import Post from "../models/Post.js";
 class PostServices {
     async getPosts() {
         try {
-            return await Post.find();
+            return await Post.find()
+                .populate("author", "username");
         } catch (error) {
             throw new Error("Ошибка при получении постов");
         };
@@ -27,6 +28,8 @@ class PostServices {
             if (!description) throw new Error("Описание не было передано");
             if (!category) throw new Error("Категория не была передана");
             if (!thumbnailUrl) throw new Error("URL изображения не был передан");
+
+            
 
             return await Post.create({ author, title, description, category, thumbnailUrl });
         } catch (error) {

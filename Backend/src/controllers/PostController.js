@@ -22,7 +22,7 @@ export const getPost = async (req, res) => {
 export const createPost = async (req, res) => {
     try {
         const { title, description, category, thumbnailUrl } = req.body;
-        const author = req.user._id;
+        const author = req.user.id;
         const post = await postServices.createPost({
             author,
             title,
@@ -32,7 +32,7 @@ export const createPost = async (req, res) => {
         });
         return res.status(201).json(post);
     } catch (error) {
-        return res.status(500).json({ message: "Ошибка сервера" });
+        return res.status(400).json({ message: error.message });
     };
 };
 

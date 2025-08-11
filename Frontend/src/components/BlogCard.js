@@ -1,13 +1,13 @@
 import { formatDate } from "../utils/formatDate";
 
 export class BlogCard {
-    constructor({title, category, thumbnail, author, date, description}) {
+    constructor({title, category, thumbnailUrl, author, createdAt, description}) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.author = author;
-        this.date = date;
-        this.thumbnail = thumbnail;
+        this.date = createdAt;
+        this.thumbnail = thumbnailUrl;
     }
 
     render() {
@@ -45,11 +45,11 @@ export class BlogCard {
 
         const author = document.createElement("p");
         author.className = "card-body__author";
-        author.innerText = this.author;
+        author.innerText = this.author.username;
 
         const date = document.createElement("p");
         date.className = "card-body__date";
-        date.innerText = formatDate(this.date);
+        date.innerText = formatDate(new Date(this.date));
 
         information.appendChild(author);
         information.appendChild(date);

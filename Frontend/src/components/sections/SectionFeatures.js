@@ -35,19 +35,23 @@ export class SectionFeatures extends Section {
         const featureBlogs = [
             {
                 title: "Test",
-                author: "Miryoqib",
+                author: {
+                    username: "Miryoqib"
+                },
                 description: "lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
-                thumbnail: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
+                thumbnailUrl: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
                 category: "test",
-                date: Date.now(),
+                createdAt: Date.now(),
             },
             {
                 title: "Test",
-                author: "Miryoqib",
+                author: {
+                    username: "Miryoqib"
+                },
                 description: "lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
-                thumbnail: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
+                thumbnailUrl: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
                 category: "test",
-                date: Date.now(),
+                createdAt: Date.now(),
             }
         ];
 

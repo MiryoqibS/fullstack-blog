@@ -67,6 +67,7 @@ export class Header {
     async _createActions() {
         const actions = document.createElement("div");
         actions.className = "header-actions";
+
         const isAuth = await this._checkAuth();
 
         if (isAuth) {
@@ -78,6 +79,20 @@ export class Header {
             const profileIcon = loadIcon("user");
             profileButton.appendChild(profileIcon);
             actions.appendChild(profileButton);
+
+            const role = await this._getUserRole();
+
+            if (role === "creator") {
+                const createPostButton = document.createElement("button");
+                createPostButton.className = "header-actions__button button";
+                createPostButton.innerText = "Создать пост";
+                createPostButton.onclick = () => window.location.href = "/src/pages/create-post.html";
+
+                const createIcon = loadIcon("create",);
+                createPostButton.appendChild(createIcon);
+
+                actions.appendChild(createPostButton);
+            };
         } else {
             [
                 {
@@ -100,27 +115,18 @@ export class Header {
             });
         };
 
-        const role = await this._getUserRole();
-
-        if (role === "creator") {
-            const createPostButton = document.createElement("button");
-            createPostButton.className = "header-actions__button button";
-            createPostButton.innerText = "Создать пост";
-
-            const createIcon = loadIcon("create",);
-            createPostButton.appendChild(createIcon);
-
-            actions.appendChild(createPostButton);
-        };
-
         return actions;
     }
 
     async _checkAuth() {
-        const res = await api.get("/user/isAuth");
-        const data = res.data;
-        const isAuth = data.isAuth;
-        return isAuth;
+        try {
+            const res = await api.get("/user/isAuth");
+            const data = res.data;
+            const isAuth = data.isAuth;
+            return isAuth;
+        } catch (error) {
+            return false;
+        }
     }
 
     async _getUsername() {
