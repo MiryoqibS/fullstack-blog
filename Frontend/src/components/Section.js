@@ -14,7 +14,7 @@ export class Section {
 
         const link = document.createElement("a");
         link.className = "section-header__link";
-        link.innerText = "More"
+        link.innerText = "Перейти"
 
         const arrowRightIcon = loadIcon("arrowRight", 20, 20);
         link.appendChild(arrowRightIcon);

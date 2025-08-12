@@ -1,13 +1,14 @@
 import { formatDate } from "../utils/formatDate";
 
 export class BlogCard {
-    constructor({title, category, thumbnailUrl, author, createdAt, description}) {
+    constructor({title, category, thumbnailUrl, author, createdAt, description, _id}) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.author = author;
         this.date = createdAt;
         this.thumbnail = thumbnailUrl;
+        this.id = _id;
     }
 
     render() {
@@ -53,13 +54,19 @@ export class BlogCard {
 
         information.appendChild(author);
         information.appendChild(date);
-
         body.appendChild(information);
 
         const description = document.createElement("p");
         description.className = "card-body__description";
         description.innerText = this.description;
         body.appendChild(description);
+
+        const seePostButton = document.createElement("button");
+        seePostButton.className = "card-body__button button";
+        seePostButton.innerText = "Посмотреть";
+        seePostButton.onclick = () => window.location.href = `/src/pages/post.html?id=${this.id}`;
+
+        body.appendChild(seePostButton);
 
         // Собираем всё
         card.appendChild(thumbnail);

@@ -16,6 +16,7 @@ import cors from "cors";
 // Роуты
 import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(postRoutes);
 app.use(userRoutes);
+app.use(postRoutes);
+app.use(commentRoutes);
 
 export default app;

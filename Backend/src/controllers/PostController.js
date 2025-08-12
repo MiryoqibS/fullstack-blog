@@ -12,8 +12,7 @@ export const getPosts = async (req, res) => {
 export const getPost = async (req, res) => {
     try {
         const post = await postServices.getPostById(req.params.id);
-
-        return res.status(200).json({ post });
+        return res.status(200).json(post);
     } catch (error) {
         return res.status(400).json({ message: error.message });
     };
@@ -56,3 +55,12 @@ export const deletePost = async (req, res) => {
         return res.status(400).json({ message: error.message });
     };
 };
+
+export const getLatestPosts = async (req, res) => {
+    try {
+        const latestPosts = await postServices.findLatestPosts();
+        return res.status(200).json(latestPosts);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    };
+}

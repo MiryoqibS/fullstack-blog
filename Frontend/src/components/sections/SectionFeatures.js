@@ -1,5 +1,6 @@
 import { BlogCard } from "../BlogCard";
 import { Section } from "../section";
+import api from "../../utils/axiosUtil";
 
 export class SectionFeatures extends Section {
     constructor(parentNode, title) {
@@ -7,19 +8,19 @@ export class SectionFeatures extends Section {
         this.parentNode = parentNode;
     }
 
-    init() {
-        const features = this.render();
+    async init() {
+        const features = await this.render();
         this.parentNode.appendChild(features);
     }
 
-    render() {
+    async render() {
         const section = document.createElement("div");
         section.className = "features section container";
 
         const sectionHeader = this._createHeader();
         sectionHeader.className = "features-header section-header"
 
-        const sectionBody = this._createBody();
+        const sectionBody = await this._createBody();
 
         section.appendChild(sectionHeader);
         section.appendChild(sectionBody);
@@ -27,33 +28,13 @@ export class SectionFeatures extends Section {
         return section;
     }
 
-    _createBody() {
+    async _createBody() {
         const body = document.createElement("div");
         body.className = "section-body";
 
         // Временно для проверки работы статический массив
-        const featureBlogs = [
-            {
-                title: "Test",
-                author: {
-                    username: "Miryoqib"
-                },
-                description: "lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
-                thumbnailUrl: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
-                category: "test",
-                createdAt: Date.now(),
-            },
-            {
-                title: "Test",
-                author: {
-                    username: "Miryoqib"
-                },
-                description: "lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem",
-                thumbnailUrl: "https://live.worldtourismforum.net/uploads/The%20Future%20of%20Tourism.jpg",
-                category: "test",
-                createdAt: Date.now(),
-            }
-        ];
+        const response = await api.get("/posts/latest");
+        const featureBlogs = response.data;
 
         featureBlogs.forEach((blog) => {
             const blogCard = new BlogCard(blog).render();

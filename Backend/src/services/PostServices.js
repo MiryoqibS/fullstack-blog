@@ -12,9 +12,21 @@ class PostServices {
 
     async getPostById(id) {
         try {
-            return await Post.findById(id);
+            return await Post.findById(id)
+                .populate("author", "username");
         } catch (error) {
             throw new Error("Ошибка при поиске поста");
+        };
+    }
+
+    async findLatestPosts() {
+        try {
+            return await Post.find()
+                .sort({ createdAt: -1 })
+                .limit(2)
+                .populate("author", "username");
+        } catch (error) {
+            throw new Error("Ошибка при поиске самых последних постов");
         };
     }
 
@@ -29,7 +41,7 @@ class PostServices {
             if (!category) throw new Error("Категория не была передана");
             if (!thumbnailUrl) throw new Error("URL изображения не был передан");
 
-            
+
 
             return await Post.create({ author, title, description, category, thumbnailUrl });
         } catch (error) {
