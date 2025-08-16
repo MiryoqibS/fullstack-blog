@@ -57,10 +57,68 @@ export class RegisterForm extends Form {
                 });
 
                 if (res.status === 201) {
-                    window.location.href = "/src/pages/login.html"
+                    console.log(res);
+                    console.log(res.data);
+
+                    const { _id } = res.data;
+                    const verificationForm = this.renderVerificationForm(_id);
+                    form.replaceWith(verificationForm);
                 };
             } catch (error) {
                 console.log(`Ошибка сети: ${error.message}`);
+            };
+        });
+
+        return form;
+    }
+
+    renderVerificationForm(userId) {
+        const form = document.createElement("form");
+        form.className = "form container";
+        form.method = "POST";
+
+        const title = document.createElement("h2");
+        title.className = "form-title";
+        title.innerText = "Создать аккаунт";
+
+        const codeField = document.createElement("input");
+        codeField.className = "form-field";
+        codeField.required = true;
+        codeField.type = "number";
+        codeField.placeholder = "Код из письма";
+
+        const submit = document.createElement("button");
+        submit.type = "submit";
+        submit.innerText = "Регистрация"
+        submit.className = "form-submit button";
+
+        form.appendChild(title);
+        form.appendChild(codeField);
+        form.appendChild(submit);
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            try {
+                const code = codeField.value;
+
+                console.log({
+                    userId,
+                    code
+                });
+
+
+                const response = await api.post("/user/verify", {
+                    userId,
+                    code
+                });
+
+                if (response.status === 200) {
+                    alert("Аккаунт подтверждён");
+                    window.location.href = "/src/pages/login.html";
+                };
+            } catch (error) {
+                alert(`Ошибка при попытке подтверждения: ${error.message}`);
             };
         });
 

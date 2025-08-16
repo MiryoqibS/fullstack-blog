@@ -115,7 +115,7 @@ export class PostCard {
         commentSubmit.addEventListener("click", async () => {
             try {
                 const response = await api.post(`/comments/${this.id}`, {
-                    text: commentInput.value
+                    text: commentInput.value,
                 });
 
                 if (response.status === 201) {

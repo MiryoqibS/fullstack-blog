@@ -5,11 +5,24 @@ import { userServices } from "../services/UserServices.js";
 export const register = async (req, res) => {
     try {
         const user = await userServices.createUser(req.body);
-        return res.status(201).json(user);
+        const userObj = user.toObject();
+        delete userObj.password;
+        return res.status(201).json(userObj);
     } catch (error) {
         return res.status(400).json({ message: error.message });
     };
 };
+
+// Подтверждения аккаунта
+export const verify = async (req, res) => {
+    try {
+        const { userId, code } = req.body;
+        await userServices.verifyUser(userId, code);
+        return res.status(200).json({ message: "Аккаунт успешно подтверждён", isVerified: true });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    };
+}
 
 // Авторизация
 export const login = async (req, res) => {
@@ -19,6 +32,10 @@ export const login = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({ message: "Пользователь не был найден" });
+        };
+
+        if (!user.isVerified) {
+            return res.status(403).json({ message: "Пользователь не подтвердил аккаунт" });
         };
 
         const isMatch = await userServices.verifyPassword(password, user.password);
@@ -56,7 +73,7 @@ export const isAuthenticated = async (req, res) => {
 // Получение профиля
 export const getProfile = async (req, res) => {
     try {
-        const user = req.user;   
+        const user = req.user;
         return res.status(200).json(user);
     } catch (error) {
         return res.status(500).json({ message: "Ошибка сервера" });

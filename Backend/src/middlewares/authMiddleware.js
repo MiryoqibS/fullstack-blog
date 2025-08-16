@@ -16,6 +16,10 @@ const checkAuth = async (req, res, next) => {
 
     const user = await userServices.findUserById(session.userId);
 
+    if (!user) {
+        return res.status(401).json({ message: "Пользователь не найден" });
+    }
+
     req.user = user.toJSON();
 
     next();

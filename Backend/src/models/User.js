@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "admin", "creator"],
         default: "user",
     },
+    isVerified: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     toJSON: {
         transform(doc, ret) {
