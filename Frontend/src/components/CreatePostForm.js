@@ -18,12 +18,7 @@ export class CreatePostForm extends Form {
         form.className = "form container";
         form.method = "POST";
 
-        const thumbnailUrlField = this.createField(
-            "URL изображение поста",
-            "thumbnailUrl",
-            () => true,
-            "Не валидная URL ссылка",
-        );
+        const thumbnailField = this.createThumbnailField();
 
         const titleField = this.createField(
             "Заголовок поста",
@@ -53,7 +48,7 @@ export class CreatePostForm extends Form {
         const createIcon = loadIcon("create");
         submitButton.appendChild(createIcon);
 
-        form.appendChild(thumbnailUrlField);
+        form.appendChild(thumbnailField);
         form.appendChild(titleField);
         form.appendChild(categoryField);
         form.appendChild(descriptionField);
@@ -61,17 +56,24 @@ export class CreatePostForm extends Form {
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
+            const thumbnailImageInput = thumbnailField.querySelector("input");
 
-            const thumbnailUrlValue = thumbnailUrlField.querySelector("input").value;
             const titleValue = titleField.querySelector("input").value;
             const categoryValue = categoryField.querySelector("input").value;
             const descriptionValue = descriptionField.querySelector("input").value;
 
-            const res = await api.post("/posts", {
-                thumbnailUrl: thumbnailUrlValue,
-                title: titleValue,
-                category: categoryValue,
-                description: descriptionValue,
+            const file = thumbnailImageInput.files[0];
+            if (!file) return console.log("Выберите изображение для поста");
+            const formData = new FormData();
+            formData.append("thumbnail", file);
+            formData.append("title", titleValue);
+            formData.append("category", categoryValue);
+            formData.append("description", descriptionValue);
+
+            const res = await api.post("/posts", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
             });
 
             if (res.status === 201) {
@@ -82,5 +84,40 @@ export class CreatePostForm extends Form {
         });
 
         return form;
+    }
+
+    createThumbnailField() {
+        const thumbnailField = document.createElement("div");
+        thumbnailField.className = "form-field";
+
+        const thumbnailInput = document.createElement("input");
+        thumbnailInput.type = "file";
+        thumbnailInput.accept = "image/png, image/jpeg, image/jpg, image/webp";
+        thumbnailInput.style.display = "none";
+
+        const thumbnailPreview = document.createElement("img");
+        thumbnailPreview.className = "form-field__preview";
+        thumbnailPreview.style.display = "none";
+
+        thumbnailInput.addEventListener("change", () => {
+            const file = thumbnailInput.files[0];
+            const previewUrl = URL.createObjectURL(file);
+            thumbnailPreview.src = previewUrl;
+            thumbnailPreview.style.display = "block";
+        });
+
+        const thumbnailSelectButton = document.createElement("button");
+        thumbnailSelectButton.type = "button";
+        thumbnailSelectButton.innerText = "Выбрать файл";
+        thumbnailSelectButton.className = "button";
+
+        thumbnailSelectButton.onclick = () => thumbnailInput.click();
+
+        thumbnailField.appendChild(thumbnailInput);
+        thumbnailField.appendChild(thumbnailPreview);
+        thumbnailField.appendChild(thumbnailSelectButton);
+
+
+        return thumbnailField;
     }
 }

@@ -11,22 +11,20 @@ dotenv.config({ path: envPath });
 
 import nodemailer from "nodemailer";
 
-class MailServices {
-    constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-    }
+const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    },
+});
 
+export const MailService = {
     async sendMail(to, subject, text, html) {
         try {
-            await this.transporter.sendMail({
+            await transporter.sendMail({
                 from: process.env.EMAIL_USER,
                 to,
                 subject,
@@ -42,7 +40,5 @@ class MailServices {
         } catch (error) {
             console.log(`Ошибка при отправки письма: ${error.message}`);
         };
-    };
+    },
 };
-
-export const mailServices = new MailServices();

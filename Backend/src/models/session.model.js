@@ -12,7 +12,10 @@ const sessionSchema = new mongoose.Schema({
     expiresAt: {
         type: Date,
         required: true,
+        index: {
+            expires: 0,
+        },
     },
 });
 
-export default mongoose.model("Session", sessionSchema);
+export const Session = mongoose.model("Session", sessionSchema);

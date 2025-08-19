@@ -1,4 +1,4 @@
-import VerificationCode from "../models/VerificationCode.js";
+import { VerificationCode } from "../models/VerificationCode.model.js";
 
 class VerificationCodeServices {
     async createCode(userId, code) {

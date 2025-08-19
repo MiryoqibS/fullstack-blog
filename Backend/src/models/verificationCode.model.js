@@ -13,8 +13,10 @@ const verificationCodeSchema = new mongoose.Schema({
     expiresAt: {
         type: Date,
         required: true,
-        expires: 0,
+        index: {
+            expires: 0,
+        },
     },
 });
 
-export default mongoose.model("VerificationCode", verificationCodeSchema);
+export const VerificationCode = mongoose.model("VerificationCode", verificationCodeSchema);

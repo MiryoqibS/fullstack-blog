@@ -1,6 +1,7 @@
-import Post from "../models/Post.js";
+import { Post } from "../models/Post.model.js";
 
-class PostServices {
+export const PostsService = {
+    // == Поиск всех постов ==
     async getPosts() {
         try {
             return await Post.find()
@@ -8,8 +9,9 @@ class PostServices {
         } catch (error) {
             throw new Error("Ошибка при получении постов");
         };
-    }
+    },
 
+    // == Поиск поста по идентификатору ==
     async getPostById(id) {
         try {
             return await Post.findById(id)
@@ -17,8 +19,9 @@ class PostServices {
         } catch (error) {
             throw new Error("Ошибка при поиске поста");
         };
-    }
+    },
 
+    // == Поиск подледных постов ==
     async findLatestPosts() {
         try {
             return await Post.find()
@@ -28,8 +31,9 @@ class PostServices {
         } catch (error) {
             throw new Error("Ошибка при поиске самых последних постов");
         };
-    }
+    },
 
+    // == Создание поста ==
     async createPost(data) {
         try {
             const { author, title, description, category, thumbnailUrl } = data;
@@ -47,8 +51,9 @@ class PostServices {
         } catch (error) {
             throw new Error("Ошибка при создании поста");
         };
-    }
+    },
 
+    // == Обновление поста ==
     async updatePost(id, data) {
         try {
             const { title, description, category, thumbnailUrl } = data;
@@ -63,15 +68,14 @@ class PostServices {
         } catch (error) {
             throw new Error("Ошибка при обновлении поста");
         };
-    }
+    },
 
+    // == Удаление поста ==
     async deletePost(id) {
         try {
             return await Post.findByIdAndDelete(id);
         } catch (error) {
             throw new Error("Ошибка при удалении поста");
         };
-    }
-}
-
-export const postServices = new PostServices();
+    },
+};

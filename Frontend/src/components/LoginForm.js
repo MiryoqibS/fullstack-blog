@@ -48,7 +48,7 @@ export class LoginForm extends Form {
                 const res = await api.post("/user/login", {
                     email: emailValue,
                     password: passwordValue,
-                });
+                }, { withCredentials: true });
 
                 if (res.status === 200) {
                     window.location.href = "/src/index.html";

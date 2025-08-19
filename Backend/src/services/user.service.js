@@ -1,35 +1,36 @@
-import User from "../models/User.js";
+import { User } from "../models/User.model.js";
+import { verificationCodeServices } from "./verificationCode.service.js";
+import { MailService } from "./mail.service.js";
 import bcrypt from "bcrypt";
-import { verificationCodeServices } from "./VerificationCodeServices.js";
-import { mailServices } from "./MailServices.js";
 
 const generateCode = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-class UserServices {
+export const UserService = {
+    // == Поиск пользователя по идентификатору ==
     async findUserById(id) {
         try {
             return await User.findById(id);
         } catch (error) {
             throw new Error("Ошибка при поиске пользователя по идентификатору");
         }
-    }
+    },
 
+    // == Поиск пользователя по электронной почте ==
     async findUserByEmail(email) {
         try {
             return await User.findOne({ email });
         } catch (error) {
             throw new Error("Ошибка при поиске пользователя по электронной почте");
         }
-    }
+    },
 
+    // == Создание пользователя ==
     async createUser(data) {
         try {
             const { username, password, email } = data;
 
             if (!username) throw new Error("Имя пользователя отсутствует");
-
             if (!password) throw new Error("Пароль пользователя отсутствует");
-
             if (!email) throw new Error("Электронная почта пользователя отсутствует");
 
             const SALT_ROUNDS = 10;
@@ -41,7 +42,7 @@ class UserServices {
             const code = generateCode();
             await verificationCodeServices.createCode(user._id, code);
 
-            await mailServices.sendMail(
+            await MailService.sendMail(
                 email,
                 "Подтверждение регистрации | Miryoqib Blog",
                 `Ваш код подтверждения аккаунта: ${code}`,
@@ -52,8 +53,9 @@ class UserServices {
         } catch (error) {
             throw new Error("Ошибка при создании пользователя")
         }
-    }
+    },
 
+    // == Подтверждения аккаунта пользователя ==
     async verifyUser(userId, code) {
         const record = await verificationCodeServices.findCode(userId);
         if (!record) throw new Error("Неверный идентификатор пользователя");
@@ -67,23 +69,23 @@ class UserServices {
         await verificationCodeServices.deleteCodes(userId);
 
         return true;
-    }
+    },
 
+    // == Удаление пользователя ==
     async deleteUser(id) {
         try {
             return await User.findByIdAndDelete(id);
         } catch (error) {
             throw new Error("Ошибка при удалении пользователя")
         }
-    }
+    },
 
+    // == Проверка совпадения пароля ==
     async verifyPassword(password, hashedPassword) {
         try {
             return bcrypt.compare(password, hashedPassword);
         } catch (error) {
             throw new Error("Ошибка при проверки пароля")
         }
-    }
+    },
 };
-
-export const userServices = new UserServices();

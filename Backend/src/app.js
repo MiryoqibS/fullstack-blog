@@ -14,9 +14,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 // Роуты
-import postRoutes from "./routes/postRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import commentRoutes from "./routes/commentRoutes.js";
+import { PostRoutes } from "./routes/post.routes.js";
+import { UserRoutes } from "./routes/user.routes.js";
+import { commentRoutes } from "./routes/comment.routes.js";
 
 const app = express();
 
@@ -27,8 +27,11 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(userRoutes);
-app.use(postRoutes);
+app.use("/storage/avatars", express.static(path.join(__dirname, "uploads/avatars")));
+app.use("/storage/posts", express.static(path.join(__dirname, "uploads/posts")));
+
+app.use(UserRoutes);
+app.use(PostRoutes);
 app.use(commentRoutes);
 
 export default app;
