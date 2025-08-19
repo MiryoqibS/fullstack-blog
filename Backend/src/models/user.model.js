@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default: "",
+        default: "http://192.168.100.151:5000/storage/avatars/default.webp",
     },
     isVerified: {
         type: Boolean,

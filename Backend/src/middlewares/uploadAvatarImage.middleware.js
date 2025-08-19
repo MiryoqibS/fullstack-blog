@@ -6,14 +6,14 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// == Хранилище для изображений постов ==
+// == Хранилище для хранения изображения профиля ==
 const storage = multer.diskStorage({
-    // Путь
+    // Путь файла
     destination(req, file, cb) {
-        const filePath = path.join(__dirname, "../uploads/posts");
+        const filePath = path.join(__dirname, "../uploads/avatars");
         cb(null, filePath);
     },
-    
+
     // Названые файла
     filename(req, file, cb) {
         const uniqueId = uuidv4();
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     },
 });
 
-// == Функция для фильтрации ==
+// == Функция для фильтрации файлов ==
 const fileFilter = (req, file, cb) => {
     const allowed = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
     if (allowed.includes(file.mimetype)) {
@@ -32,7 +32,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 // == Middleware ==
-export const uploadPostImageMiddleware = multer({
+export const uploadAvatarImageMiddleware = multer({
     storage,
     fileFilter,
     limits: {

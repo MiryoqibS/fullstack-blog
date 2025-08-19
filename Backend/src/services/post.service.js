@@ -5,7 +5,7 @@ export const PostsService = {
     async getPosts() {
         try {
             return await Post.find()
-                .populate("author", "username");
+                .populate("author", "username avatar");
         } catch (error) {
             throw new Error("Ошибка при получении постов");
         };
@@ -27,7 +27,7 @@ export const PostsService = {
             return await Post.find()
                 .sort({ createdAt: -1 })
                 .limit(2)
-                .populate("author", "username");
+                .populate("author", "username avatar");
         } catch (error) {
             throw new Error("Ошибка при поиске самых последних постов");
         };
@@ -44,8 +44,6 @@ export const PostsService = {
             if (!description) throw new Error("Описание не было передано");
             if (!category) throw new Error("Категория не была передана");
             if (!thumbnailUrl) throw new Error("URL изображения не был передан");
-
-
 
             return await Post.create({ author, title, description, category, thumbnailUrl });
         } catch (error) {

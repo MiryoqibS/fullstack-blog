@@ -85,7 +85,22 @@ export const UserService = {
         try {
             return bcrypt.compare(password, hashedPassword);
         } catch (error) {
-            throw new Error("Ошибка при проверки пароля")
-        }
+            throw new Error("Ошибка при проверки пароля");
+        };
+    },
+
+    // == Изменения фото профиля ==
+    async changeAvatar(userId, avatarPath) {
+        try {
+            const user = await User.findById(userId);
+            if(!user) throw new Error("Пользователь не был найден");
+
+            user.avatar = avatarPath;
+            await user.save();
+
+            return user;
+        } catch (error) {
+            throw new Error("Ошибка при изменении фото профиля");  
+        };
     },
 };

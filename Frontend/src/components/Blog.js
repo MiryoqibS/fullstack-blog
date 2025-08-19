@@ -19,6 +19,8 @@ export class Blog {
         const posts = res.data;
 
         posts.forEach(post => {
+            console.log(post);
+            
             const blogCard = new BlogCard(post).render();
             blog.appendChild(blogCard);
         });

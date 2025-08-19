@@ -1,7 +1,7 @@
 import { formatDate } from "../utils/formatDate";
 
 export class BlogCard {
-    constructor({title, category, thumbnailUrl, author, createdAt, description, _id}) {
+    constructor({ title, category, thumbnailUrl, author, createdAt, description, _id }) {
         this.title = title;
         this.description = description;
         this.category = category;
@@ -44,6 +44,10 @@ export class BlogCard {
         const information = document.createElement("div");
         information.className = "card-body__information";
 
+        const avatar = document.createElement("img");
+        avatar.className = "card-body__avatar";
+        avatar.src = this.author.avatar;
+
         const author = document.createElement("p");
         author.className = "card-body__author";
         author.innerText = this.author.username;
@@ -52,6 +56,7 @@ export class BlogCard {
         date.className = "card-body__date";
         date.innerText = formatDate(new Date(this.date));
 
+        information.appendChild(avatar);
         information.appendChild(author);
         information.appendChild(date);
         body.appendChild(information);

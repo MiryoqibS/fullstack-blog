@@ -44,12 +44,25 @@
             display: flex;
             align-items: center;
             column-gap: 20px;
+            width: 100%;
+            border-radius: 10px;
+            padding: 2px 6px;
+            background-color: rgba(11, 96, 175, 0.4); // fallback
+            background-color: color-mix(in srgb, var(--color-creator) 40%, transparent);
+        }
+
+        &__avatar {
+            width: 48px;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-creator);
         }
 
         &__author {
             font-weight: 700;
             font-size: 14px;
-            color: var(--color-secondary);
+            color: var(--color-creator);
         }
 
         &__date {

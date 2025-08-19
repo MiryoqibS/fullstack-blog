@@ -21,10 +21,12 @@ export class Profile {
         const response = await api.get("/user/profile");
         const userData = response.data;
 
-        const usernameField = this._createUsernameField(userData.username);
-        const emailField = this._createEmailField(userData.email);
-        const roleField = this._createRoleField(userData.role);
+        const avatarField = this.createAvatarField(userData.avatar);
+        const usernameField = this.createUsernameField(userData.username);
+        const emailField = this.createEmailField(userData.email);
+        const roleField = this.createRoleField(userData.role);
 
+        profile.appendChild(avatarField);
         profile.appendChild(usernameField);
         profile.appendChild(emailField);
         profile.appendChild(roleField);
@@ -33,7 +35,52 @@ export class Profile {
         return container;
     }
 
-    _createUsernameField(username) {
+    createAvatarField(avatarPath) {
+        const avatarField = document.createElement("div");
+        avatarField.className = "profile-field";
+
+        const avatarTitle = document.createElement("p");
+        avatarTitle.className = "profile-field__title";
+        avatarTitle.innerText = "Фото профиля: ";
+
+        const avatarImage = document.createElement("img");
+        avatarImage.className = "profile-field__image";
+        avatarImage.src = avatarPath;
+
+        const changeAvatarInput = document.createElement("input");
+        changeAvatarInput.type = "file";
+        changeAvatarInput.accept = "image/jpg, image/png, image/jpeg, image/webp";
+        changeAvatarInput.style.display = "none";
+
+        changeAvatarInput.addEventListener("change", async () => {
+            const file = changeAvatarInput.files[0];
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            const response = await api.post("/user/avatar", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                withCredentials: true,
+            });
+
+            window.location.reload();
+        });
+
+        const changeAvatarButton = document.createElement("button");
+        changeAvatarButton.className = "profile-field__button button";
+        changeAvatarButton.innerText = "Изменить";
+        changeAvatarButton.onclick = () => changeAvatarInput.click();
+
+        avatarField.appendChild(avatarTitle);
+        avatarField.appendChild(avatarImage);
+        avatarField.appendChild(changeAvatarInput);
+        avatarField.appendChild(changeAvatarButton);
+
+        return avatarField;
+    }
+
+    createUsernameField(username) {
         const usernameField = document.createElement("div");
         usernameField.className = "profile-field";
 
@@ -51,7 +98,7 @@ export class Profile {
         return usernameField;
     }
 
-    _createEmailField(email) {
+    createEmailField(email) {
         const emailField = document.createElement("div");
         emailField.className = "profile-field";
 
@@ -72,7 +119,7 @@ export class Profile {
         return emailField;
     }
 
-    _createRoleField(role) {
+    createRoleField(role) {
         const roleField = document.createElement("div");
         roleField.className = "profile-field";
 
