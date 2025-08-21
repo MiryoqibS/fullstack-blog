@@ -114,17 +114,37 @@
 
             &-comment {
                 display: flex;
-                align-items: start;
-                padding: 16px 20px;
-                border-radius: 6px;
-                column-gap: 28px;
-                background-color: var(--color-gray);
+                flex-direction: column;
+                row-gap: 16px;
+                align-items: end;
+
+                &__main {
+                    display: flex;
+                    align-items: start;
+                    padding: 16px 20px;
+                    border-radius: 6px;
+                    column-gap: 28px;
+                    background-color: var(--color-gray);
+                    box-shadow: var(--shadow);
+                    width: 100%;
+                }
+
+                &__replies {
+                    width: 80%;
+                }
 
                 &__profile {
                     display: flex;
                     flex-direction: column;
                     row-gap: 6px;
-                    align-items: end;
+                    align-items: center;
+
+                    &-avatar {
+                        width: 40px;
+                        aspect-ratio: 1/1;
+                        object-fit: cover;
+                        border-radius: 50%;
+                    }
 
                     &-author {
                         font-weight: 600;
@@ -134,6 +154,28 @@
                 &__body {
                     &-text {
                         font-weight: 600;
+                    }
+                }
+
+                &__actions {
+                    display: flex;
+                    justify-content: center;
+                    align-items: end;
+                    column-gap: 8px;
+                    margin-left: auto;
+                    margin-top: auto;
+
+                    &-button:nth-of-type(1) {
+                        svg {
+                            transform: rotate(0deg);
+                        }
+
+                        @include m.hover() {
+                            svg {
+                                transform: rotate(180deg);
+                            }
+                        }
+
                     }
                 }
             }

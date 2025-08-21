@@ -1,4 +1,4 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 import { loadIcon } from "../utils/loadIcon";
 
 export class Header {
@@ -120,24 +120,17 @@ export class Header {
 
     async _checkAuth() {
         try {
-            const res = await api.get("/user/isAuth");
-            const data = res.data;
-            const isAuth = data.isAuth;
-            return isAuth;
+            return await Api.checkAuth();
         } catch (error) {
             return false;
         }
     }
 
     async _getUsername() {
-        const user = await api.get("/user/profile");
-        const data = user.data;
-        return data.username;
+        return await Api.getUsername();
     }
 
     async _getUserRole() {
-        const user = await api.get("/user/profile");
-        const data = user.data;
-        return data.role;
+        return await Api.getRole();
     }
 }

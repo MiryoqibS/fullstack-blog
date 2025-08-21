@@ -4,12 +4,10 @@ import "/src/importer.scss";
 import { Header } from "../components/Header";
 import { CreatePostForm } from "../components/createPostForm";
 import { Footer } from "../components/Footer";
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 
 // Проверка роля пользователя
-const res = await api.get("/user/profile");
-const data = res.data;
-const role = data.role;
+const role = await Api.getRole();
 
 if (role !== "creator") {
     window.location.href = "/src/index.html";

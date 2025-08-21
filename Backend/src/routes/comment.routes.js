@@ -6,3 +6,4 @@ export const commentRoutes = Router();
 
 commentRoutes.get("/api/comments/:id", CommentController.getComments);
 commentRoutes.post("/api/comments/:id", authMiddleware, CommentController.addComment);
+commentRoutes.post("/api/comments/reply/:id", authMiddleware, CommentController.replyComment)

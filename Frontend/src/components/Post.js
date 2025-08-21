@@ -1,4 +1,4 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 import { PostCard } from "./PostCard";
 
 export class Post {
@@ -16,9 +16,8 @@ export class Post {
         post.className = "post container";
 
         const postId = this._getPostIdByUrl();
-        const response = await api.get(`/posts/${postId}`);
-        const data = response.data;
-        const postCard = await new PostCard(data).render();
+        const postData = await Api.getPost(postId);
+        const postCard = await new PostCard(postData).render();
 
         const postSidebar = this.createSidebar();
 

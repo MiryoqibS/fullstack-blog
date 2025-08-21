@@ -1,5 +1,5 @@
 import { Form } from "./Form";
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 
 export class RegisterForm extends Form {
     constructor(parentNode) {
@@ -49,17 +49,15 @@ export class RegisterForm extends Form {
                 const emailValue = emailField.querySelector("input").value;
                 const usernameValue = usernameField.querySelector("input").value;
                 const passwordValue = passwordField.querySelector("input").value;
-
-                const res = await api.post("/user/register", {
+                const data = {
                     email: emailValue,
                     username: usernameValue,
                     password: passwordValue,
-                });
+                };
+
+                const res = await Api.register(data);
 
                 if (res.status === 201) {
-                    console.log(res);
-                    console.log(res.data);
-
                     const { _id } = res.data;
                     const verificationForm = this.renderVerificationForm(_id);
                     form.replaceWith(verificationForm);

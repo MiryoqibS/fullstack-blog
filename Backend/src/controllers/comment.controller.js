@@ -26,4 +26,20 @@ export const CommentController = {
             return res.status(400).json({ message: error.message });
         };
     },
+
+    // == Добавление ответа комментарию ==
+    async replyComment(req, res) {
+        try {
+            const parentCommentId = req.params.id;
+            const replyComment = await commentServices.createReplyComment({
+                parentCommentId,
+                authorId: req.user.id,
+                ...req.body,
+            });
+            
+            return res.status(201).json({ message: "ваш комментарий добавлен" });
+        } catch (error) {
+            return res.status(400).json({ message: error.message });
+        };
+    },
 };

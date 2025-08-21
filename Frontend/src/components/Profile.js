@@ -1,4 +1,4 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 import { loadIcon } from "../utils/loadIcon";
 
 export class Profile {
@@ -18,8 +18,7 @@ export class Profile {
         const profile = document.createElement("div");
         profile.className = "profile";
 
-        const response = await api.get("/user/profile");
-        const userData = response.data;
+        const userData = await Api.getProfile();
 
         const avatarField = this.createAvatarField(userData.avatar);
         const usernameField = this.createUsernameField(userData.username);
@@ -57,13 +56,8 @@ export class Profile {
             const formData = new FormData();
             formData.append("avatar", file);
 
-            const response = await api.post("/user/avatar", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-                withCredentials: true,
-            });
-
+            await Api.updateAvatar(formData);
+            
             window.location.reload();
         });
 

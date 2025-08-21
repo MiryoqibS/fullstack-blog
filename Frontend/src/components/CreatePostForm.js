@@ -1,4 +1,4 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 import { loadIcon } from "../utils/loadIcon";
 import { Form } from "./Form";
 
@@ -70,11 +70,7 @@ export class CreatePostForm extends Form {
             formData.append("category", categoryValue);
             formData.append("description", descriptionValue);
 
-            const res = await api.post("/posts", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
+            const res = await Api.createPost(formData);
 
             if (res.status === 201) {
                 window.location.href = "/src/pages/blog.html";

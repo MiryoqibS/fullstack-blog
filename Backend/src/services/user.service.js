@@ -1,4 +1,4 @@
-import { User } from "../models/User.model.js";
+import { User } from "../models/user.model.js";
 import { verificationCodeServices } from "./verificationCode.service.js";
 import { MailService } from "./mail.service.js";
 import bcrypt from "bcrypt";

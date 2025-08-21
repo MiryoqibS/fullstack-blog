@@ -23,3 +23,10 @@ h3 {
 h4 {
     @include m.fluid-text(16, 24);
 }
+
+a,
+button,
+input,
+svg {
+    transition: all var(--transition-slow);
+}

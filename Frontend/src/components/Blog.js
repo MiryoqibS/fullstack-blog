@@ -1,4 +1,4 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
 import { BlogCard } from "./BlogCard";
 
 export class Blog {
@@ -15,8 +15,7 @@ export class Blog {
         const blog = document.createElement("div");
         blog.className = "blog container";
 
-        const res = await api.get("/posts");
-        const posts = res.data;
+        const posts = await Api.getPosts();
 
         posts.forEach(post => {
             console.log(post);

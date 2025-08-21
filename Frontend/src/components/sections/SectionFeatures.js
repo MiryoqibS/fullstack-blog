@@ -1,6 +1,6 @@
 import { BlogCard } from "../BlogCard";
 import { Section } from "../section";
-import api from "../../utils/axiosUtil";
+import { Api } from "../../utils/api";
 
 export class SectionFeatures extends Section {
     constructor(parentNode, title) {
@@ -33,8 +33,7 @@ export class SectionFeatures extends Section {
         body.className = "section-body";
 
         // Временно для проверки работы статический массив
-        const response = await api.get("/posts/latest");
-        const featureBlogs = response.data;
+        const featureBlogs = await Api.getLatestPosts();
 
         featureBlogs.forEach((blog) => {
             const blogCard = new BlogCard(blog).render();

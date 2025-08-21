@@ -1,4 +1,5 @@
-import api from "../utils/axiosUtil";
+import { Api } from "../utils/api";
+import { loadIcon } from "../utils/loadIcon";
 import { formatDate } from "../utils/formatDate";
 
 export class PostCard {
@@ -10,6 +11,7 @@ export class PostCard {
         this.category = category;
         this.createdAt = new Date(createdAt);
         this.id = _id;
+        this.replyComment = null;
     }
 
     async render() {
@@ -91,8 +93,7 @@ export class PostCard {
         commentUsername.className = "post-card__comments-field__author";
 
         try {
-            const response = await api.get("/user/profile");
-            const user = response.data;
+            const user = await Api.getProfile();
             commentUsername.classList.add(user.role);
             commentUsername.innerText = user.username
         } catch (error) {
@@ -110,20 +111,38 @@ export class PostCard {
         commentSubmit.innerText = "оставить";
 
         const postComments = await this._fetchComments();
-        const commentsList = this._renderComments(postComments);
+        const commentsList = this.renderComments(postComments);
 
         commentSubmit.addEventListener("click", async () => {
             try {
-                const response = await api.post(`/comments/${this.id}`, {
-                    text: commentInput.value,
-                });
+                const commentType = commentInput.value.trim().toLocaleLowerCase().includes("ответь") ? "reply" : "comment";
+                if (commentType === "comment") {
+                    console.log("comment");
 
-                if (response.status === 201) {
-                    const comments = await this._fetchComments();
-                    const updatedPostComments = this._renderComments(comments);
-                    commentsList.replaceWith(updatedPostComments);
+                    const response = await Api.addComment(this.id, commentInput.value);
 
-                    commentInput.value = "";
+                    if (response.status === 201) {
+                        const comments = await this._fetchComments();
+                        const updatedPostComments = this.renderComments(comments);
+                        commentsList.replaceWith(updatedPostComments);
+
+                        commentInput.value = "";
+                    };
+                };
+
+                if (commentType === "reply") {
+                    console.log("reply");
+
+                    const response = await Api.replyComment(this.replyComment, this.id, commentInput.value);
+
+                    if (response.status === 201) {
+                        const comments = await this._fetchComments();
+                        const updatedPostComments = this.renderComments(comments);
+                        commentsList.replaceWith(updatedPostComments);
+                        this.replyComment = null;
+
+                        commentInput.value = "";
+                    };
                 };
             } catch (error) {
                 console.error(`Ошибка во время добавления комментария: ${error.message}`);
@@ -141,36 +160,44 @@ export class PostCard {
     }
 
     async _fetchComments() {
-        const response = await api.get(`/comments/${this.id}`);
-        const comments = response.data;
-        return comments;
+        return await Api.getComments(this.id);
     }
 
-    _renderComments(comments) {
+    renderComments(comments) {
         const commentsList = document.createElement("div");
         commentsList.className = "post-card__comments-list";
 
         comments.forEach(commentData => {
-            const comment = this.createComment(commentData);
-            commentsList.appendChild(comment);
+            if (!commentData.replyTo) {
+                const comment = this.createComment(commentData);
+                commentsList.appendChild(comment);
+            };
         });
 
         return commentsList;
     }
 
-    createComment({ author, text }) {
+    createComment({ _id, author, text, replies }) {
         const comment = document.createElement("div");
         comment.className = "post-card__comments-comment";
+        comment.setAttribute("data-id", _id);
 
+        // Создаём профиль автора комментария (фото профиля и его никнейм)
         const commentProfile = document.createElement("div");
-        commentProfile.className = "post-card__comments-comment_profile";
+        commentProfile.className = "post-card__comments-comment__profile";
 
-        const commentAuthor = document.createElement("p");
-        commentAuthor.innerText = author;
-        commentAuthor.className = "post-card__comments-comment__profile-author";
+        const commentAuthorAvatar = document.createElement("img");
+        commentAuthorAvatar.src = author.avatar;
+        commentAuthorAvatar.className = "post-card__comments-comment__profile-avatar";
 
-        commentProfile.appendChild(commentAuthor);
+        const commentAuthorUsername = document.createElement("p");
+        commentAuthorUsername.innerText = author.username;
+        commentAuthorUsername.className = "post-card__comments-comment__profile-author";
 
+        commentProfile.appendChild(commentAuthorAvatar);
+        commentProfile.appendChild(commentAuthorUsername);
+
+        // Создаём главный контент комментария (текст комментария)
         const commentBody = document.createElement("div");
         commentBody.className = "post-card__comments-comment__body";
 
@@ -180,8 +207,56 @@ export class PostCard {
 
         commentBody.appendChild(commentText);
 
-        comment.appendChild(commentProfile);
-        comment.appendChild(commentBody);
+        // Создаём активные кнопки для комментария ()
+        const commentActions = document.createElement("div");
+        commentActions.className = "post-card__comments-comment__actions";
+
+        const commentShowRepliesBtn = document.createElement("button");
+        commentShowRepliesBtn.className = "post-card__comments-comment__actions-button button";
+        commentShowRepliesBtn.innerText = "Посмотреть ответы";
+        const chevronUpIcon = loadIcon("chevronUp", 14, 14);
+        commentShowRepliesBtn.appendChild(chevronUpIcon);
+
+        const commentReplies = document.createElement("div");
+        commentReplies.className = "post-card__comments-comment__replies";
+
+        commentShowRepliesBtn.addEventListener("click", () => {
+            commentShowRepliesBtn.classList.toggle("show");
+
+            if (commentShowRepliesBtn.classList.contains("show")) {
+                replies.forEach((commentData) => {
+                    const replyComment = this.createComment(commentData);
+                    commentReplies.appendChild(replyComment);
+                });
+            } else {
+                commentReplies.innerHTML = "";
+            };
+        });
+
+        const commentReplyBtn = document.createElement("button");
+        commentReplyBtn.className = "post-card__comments-comment__actions-button button";
+        commentReplyBtn.innerText = "Ответить";
+        const replyIcon = loadIcon("reply", 14, 14);
+        commentReplyBtn.appendChild(replyIcon);
+
+        commentReplyBtn.addEventListener("click", () => {
+            const commentFieldInput = document.querySelector(".post-card__comments-field__input");
+            commentFieldInput.value = `Ответь: @${author.username}`;
+            this.replyComment = _id;
+            commentFieldInput.focus();
+        });
+
+        if (replies.length > 0) commentActions.appendChild(commentShowRepliesBtn);
+        commentActions.appendChild(commentReplyBtn);
+
+        const commentMain = document.createElement("div");
+        commentMain.className = "post-card__comments-comment__main";
+        commentMain.appendChild(commentProfile)
+        commentMain.appendChild(commentBody)
+        commentMain.appendChild(commentActions)
+
+        comment.appendChild(commentMain);
+        comment.appendChild(commentReplies);
 
         return comment;
     }

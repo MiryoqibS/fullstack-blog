@@ -50,4 +50,19 @@
         <polyline points="3.29 7 12 12 20.71 7" />
         <line x1="12" x2="12" y1="22" y2="12" />
     </symbol>
+
+    <!-- Chevron up icon -->
+    <symbol id="chevronUp" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-chevron-up-icon lucide-chevron-up">
+        <path d="m18 15-6-6-6 6" />
+    </symbol>
+
+    <!-- Reply icon -->
+    <symbol id="reply" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-reply-icon lucide-reply">
+        <path d="M20 18v-2a4 4 0 0 0-4-4H4" />
+        <path d="m9 17-5-5 5-5" />
+    </symbol>
 </svg>
