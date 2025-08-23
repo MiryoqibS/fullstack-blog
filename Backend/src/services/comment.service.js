@@ -6,13 +6,12 @@ class CommentServices {
     // == Создание обычного комментария под постом ==
     async createComment({ author, text, postId }) {
         try {
-            if (!author) throw new Error("Автор комментария не передан");
-            if (!text) throw new Error("Текста комментария не передан");
-            if (!postId) throw new Error("Идентификатор поста не передан");
+            const post = await PostsService.getPostById(postId);
+            if (!post) return new Error("такого поста не существует")
 
             return await Comment.create({ author, text, postId });
         } catch (error) {
-            throw new Error("Ошибка при создании комментария");
+            throw error;
         }
     }
 

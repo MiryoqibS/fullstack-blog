@@ -12,11 +12,12 @@ dotenv.config({ path: envPath });
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
 
 // Роуты
-import { PostRoutes } from "./routes/post.routes.js";
-import { UserRoutes } from "./routes/user.routes.js";
-import { commentRoutes } from "./routes/comment.routes.js";
+import { PostRoutes } from "../routes/post.routes.js";
+import { UserRoutes } from "../routes/user.routes.js";
+import { commentRoutes } from "../routes/comment.routes.js";
 
 const app = express();
 
@@ -26,9 +27,10 @@ app.use(cors({
     origin: process.env.BASE_URL,
     credentials: true,
 }));
+app.use(morgan("tiny"));
 
-app.use("/storage/avatars", express.static(path.join(__dirname, "uploads/avatars")));
-app.use("/storage/posts", express.static(path.join(__dirname, "uploads/posts")));
+app.use("/storage/avatars", express.static(path.join(__dirname, "../uploads/avatars")));
+app.use("/storage/posts", express.static(path.join(__dirname, "../uploads/posts")));
 
 app.use(UserRoutes);
 app.use(PostRoutes);

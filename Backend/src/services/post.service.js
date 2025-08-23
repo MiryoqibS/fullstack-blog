@@ -17,7 +17,7 @@ export const PostsService = {
             return await Post.findById(id)
                 .populate("author", "username");
         } catch (error) {
-            throw new Error("Ошибка при поиске поста");
+            throw new Error("такого поста не существует");
         };
     },
 
