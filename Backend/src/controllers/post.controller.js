@@ -30,7 +30,6 @@ export const PostController = {
 
             const { title, description, category } = req.body;
             const author = req.user.id;
-
             const post = await PostsService.createPost({
                 author,
                 title,
